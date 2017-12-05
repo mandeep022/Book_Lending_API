@@ -1,0 +1,830 @@
+{
+  "swagger": "2.0", 
+  "info": {
+    "description": "This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.",
+    "version": "1.0.0",
+    "title": "Book lending API",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "apiteam@swagger.io"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "library-ramanmamohtra.c9users.io:8080",
+  "basePath": "/",
+  "tags": [{
+    "name": "pet",
+    "description": "Everything about your Pets",
+    "externalDocs": {
+      "description": "Find out more",
+      "url": "http://swagger.io"
+    }
+  }, {
+    "name": "store",
+    "description": "Access to Petstore orders"
+  }, {
+    "name": "user",
+    "description": "Operations about user",
+    "externalDocs": {
+      "description": "Find out more about our store",
+      "url": "http://swagger.io"
+    }
+  }], 
+  "schemes": ["https"],
+  "paths": {
+   "/api/users/": {
+     "post": {
+        "tags": ["User"],
+        "summary": "Registration",
+        "description": "Registration",
+        "operationId": "createUser",
+        "produces": ["application/json"],
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "description": "Create user object",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/User"
+          }
+        },
+      ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      },
+     "get": {
+        "tags": ["User"],
+        "summary": "get all user info",
+        "description": "get data",
+        "operationId": "getUser",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/auth/local": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Log in",
+        "description": "Logs user into the application",
+        "operationId": "loginUser",
+         "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [{
+          "name": "email",
+          "in": "query",
+          "description": "The user name and password for login",
+          "required": true,
+          "type": "string"
+        }, {
+          "name": "password",
+          "in": "query",
+          "description": "The password for login in clear text",
+          "required": true,
+          "type": "string"
+        }],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "Invalid username/password supplied"
+          }
+        }
+      }
+    },
+    "/api/users/:id/password": {
+      "put": {
+        "tags": ["User"],
+        "summary": "change password",
+        "description": "Update an existing user account password.",
+        "operationId": "updateUserPassword",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+       "parameters": [ {
+        "name": "body",
+        "in": "body",
+        "required": true,
+        "type": "string",
+          "schema": {
+            "$ref": "#/definitions/password"
+          }
+        },
+        {
+            "name": "id",
+            "in": "path",
+            "description": "ID of user.",
+            "required": true,
+            "type": "string"
+          },
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "API key",
+          "required": true,
+          "type": "string",
+          "format": "string",
+          "default": "xxxx"
+        }],
+        "responses": {
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+           "204": {
+            "description": "Password updated"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "405": {
+            "description": "Validation exception"
+          }
+        }
+      },
+    },
+    "/api/users/{id}":{
+      "put": {
+        "tags": ["User"],
+        "summary": "edit profile",
+        "description": "Update an existing user",
+        "operationId": "updateUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of user to return",
+            "required": true,
+            "type": "string"
+          },
+          {
+          "in": "body",
+          "name": "body",
+          "description": "user object with those key-value pairs which has to updates.",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/User"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "user not found"
+          },
+          "405": {
+            "description": "Validation exception"
+          }
+        }
+      },
+      "get": {
+        "tags": ["User"],
+        "summary":"User info",
+        "description": "A single entity would be returned.",
+        "operationId": "findASingleUser",
+        "produces": [ "application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of user to return",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "API key",
+            "required": true,
+            "type": "string",
+            "format": "string",
+            "default": "xxxx"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "description": "No authorization token was found."
+          }
+        }
+      },
+      "delete": {
+        "tags": ["User"],
+        "summary": "delete a single user",
+        "description": "delete a single user",
+        "operationId": "deleteUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of user to return",
+            "required": true,
+            "type": "string"
+          },
+         
+          {
+          "in": "body",
+          "name": "body",
+          "description": "user object with those key-value pairs which has to updates.",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/User"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "user not found"
+          },
+          "405": {
+            "description": "Validation exception"
+          }
+        }
+      },
+    },
+    "/api/users/me":{
+      "get":{
+        "tags":["User"],
+        "summary":"get user info ",
+        "description":"Get user info",
+        "operationId":"getUserInfo",
+        "consumes":["application/json"],
+        "produces":["application/json"],
+        "parameters": [
+        {
+            "name": "Authorization",
+            "in": "header",
+            "description": "API key",
+            "required": true,
+            "type": "string",
+            "format": "string",
+            "default": "xxxx"
+          }],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "404": {
+            "description": "User not found."
+          }
+        }
+      }
+    },
+    "/api/books":{
+      "get":{
+        "tags":["Book"],
+        "summary":"Get all Books",
+        "description":"Get all Books",
+        "operationId":"getAllBooks",
+        "consumes":["application/json"],
+        "produces":["application/json"],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "404": {
+            "description": "No Book found"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Book"],
+        "summary": "add new Book.",
+        "description": "add Book.",
+        "operationId": "AddBook",
+         "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "description": "Create Book object",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/Book"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/api/books/{id}":{
+      "get":{
+        "tags":["Book"],
+        "summary":"A single Book.",
+        "description":"Get a single Book.",
+        "operationId":"getASingleBook",
+        "consumes":["application/json"],
+        "produces":["application/json"],
+        "parameters": [  {
+          "in": "path",
+          "name": "id",
+          "description": "Book id.",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "404": {
+            "description": "No Book found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Book"],
+        "summary": "Edit Book",
+        "description": "Admin Can only  Update an existing Book",
+        "operationId": "updateBook",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "description": "Update Book object",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/Book"
+          }
+         },
+         {
+          "in": "path",
+          "name": "id",
+          "description": "Book id.",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/Book"
+          }
+        }],
+        "responses": {
+           "200": {
+            "description": "Book updated."
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Book not found"
+          },
+          "405": {
+            "description": "Validation exception"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Book"],
+        "summary": "delete Book",
+        "description": "Delete an existing Book",
+        "operationId": "deleteBook",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+         {
+          "in": "path",
+          "name": "id",
+          "description": "Book id.",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "No content found"
+          },
+          "404": {
+            "description": "Book not found."
+          },
+          "405": {
+            "description": "Validation exception"
+          }
+        }
+      }
+    },
+    "/api/books/recent":{
+      "get":{
+        "tags":["Book"],
+        "summary":"Get recently added five Books",
+        "description":"Get recently added five Books",
+        "operationId":"getRecentFiveBooks",
+        "consumes":["application/json"],
+        "produces":["application/json"],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "404": {
+            "description": "No Book found"
+          }
+        }
+      }
+    },
+    "/api/books/by/genre/{genrename}":{
+      "get":{
+        "tags":["Book"],
+        "summary":"Get Books by genre name",
+        "description":"Get Books by genre name",
+        "operationId":"getBooksByGenre",
+        "consumes":["application/json"],
+        "produces":["application/json"],
+        "parameters": [  {
+          "in": "path",
+          "name": "genrename",
+          "description": "genre name",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "404": {
+            "description": "No Book found"
+          }
+        }
+      }
+    },
+    "/api/books/by/author/{authorname}":{
+      "get":{
+        "tags":["Book"],
+        "summary":"Get Books by author name",
+        "description":"Get Books by author name",
+        "operationId":"getBooksByAuthorName",
+        "consumes":["application/json"],
+        "produces":["application/json"],
+        "parameters": [  {
+          "in": "path",
+          "name": "authorname",
+          "description": "genre name",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "404": {
+            "description": "No Book found related to this author."
+          }
+        }
+      }
+    },
+    "/api/books/title/{titleName}":{
+      "get":{
+        "tags":["Book"],
+        "summary":"Get Books by title name",
+        "description":"Get Books by title name",
+        "operationId":"getBooksBytitleName",
+        "consumes":["application/json"],
+        "produces":["application/json"],
+        "parameters": [  {
+          "in": "path",
+          "name": "titlename",
+          "description": "title name",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "404": {
+            "description": "No Book found related to this title."
+          }
+        }
+      }
+    },
+    "/api/bookinfos":{
+      "post": {
+        "tags": ["Bookinfo"],
+        "summary": "add new Bookinfo.",
+        "description": "add Bookinfo.",
+        "operationId": "AddBookinfo",
+         "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "description": "Create Bookinfo object",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/Bookinfo"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "get":{
+        "tags":["Bookinfo"],
+        "summary":"All Bookinfo.",
+        "description":"All Bookinfo.",
+        "operationId":"getAllBookinfo",
+        "consumes":["application/json"],
+        "produces":["application/json"],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "404": {
+            "description": "No Bookinfo found"
+          }
+        }
+      },
+    },
+    "/api/bookinfos/{id}":{
+      "get":{
+        "tags":["Bookinfo"],
+        "summary":"A single Bookinfo.",
+        "description":"Get a single Bookinfo.",
+        "operationId":"getASingleBookinfo",
+        "consumes":["application/json"],
+        "produces":["application/json"],
+        "parameters": [  {
+          "in": "path",
+          "name": "id",
+          "description": "Bookinfo id.",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "404": {
+            "description": "No Bookinfo found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Bookinfo"],
+        "summary": "Edit Bookinfo",
+        "description": "Admin Can only  Update an existing Bookinfo",
+        "operationId": "updateBookinfo",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "description": "Update Tags object",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/Bookinfo"
+          }
+         },
+         {
+          "in": "path",
+          "name": "id",
+          "description": "Bookinfo id.",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/Bookinfo"
+          }
+        }],
+        "responses": {
+           "200": {
+            "description": "Bookinfo updated."
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Bookinfo not found"
+          },
+          "405": {
+            "description": "Validation exception"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Bookinfo"],
+        "summary": "INDEX-25 ||  delete Bookinfo",
+        "description": "Delete an existing Bookinfo",
+        "operationId": "deleteBookinfo",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+         {
+          "in": "path",
+          "name": "id",
+          "description": "Bookinfo id.",
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "No content found"
+          },
+          "404": {
+            "description": "Bookinfo not found."
+          },
+          "405": {
+            "description": "Validation exception"
+          }
+        }
+      }
+    },
+  },
+
+  "securityDefinitions": {
+    "petstore_auth": {
+      "type": "oauth2",
+      "authorizationUrl": "http://petstore.swagger.io/oauth/dialog",
+      "flow": "implicit",
+      "scopes": {
+        "write:pets": "modify pets in your account",
+        "read:pets": "read your pets"
+      }
+    },
+    "api_key": {
+      "type": "apiKey",
+      "name": "api_key",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "ApiResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "User":{
+       "type": "object",
+       "properties":{
+           "name": {
+              "type":"string"
+            },
+           "email": {
+             "type": "string",
+            },
+            "contactNumber":{
+              "type":"integer"
+            },
+            "role": {
+              "type": "string",
+            },
+            "password":{
+              "type":"string"
+            }
+    
+   }
+    
+  },
+    "password": {
+       "type": "object",
+      "properties": {
+      "oldPassword":{
+        "type":"string"
+      },
+      "newPassword":{
+        "type":"string"
+      }
+    }
+    },
+    "Book": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "genre": {
+          "type": "string"
+        },
+        "author": {
+          "type": "string"
+        },
+        "authorName": {
+          "type": "string"
+        },
+        "availablity": {
+          "type": "string"
+        },
+        "publicatonInfo": {
+          "type": "object"
+        },
+      },
+      "xml": {
+        "name": "Book"
+      }
+    },
+    "Bookinfo": {
+      "type": "object",
+      "properties": {
+        "bookid": {
+          "type": "string"
+        },
+        "user": {
+          "type": "string"
+        },
+        "latefees": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "dueDate": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "Bookinfo"
+      }
+    },
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}
