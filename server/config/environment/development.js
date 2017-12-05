@@ -7,7 +7,7 @@ module.exports = {
 
   // MongoDB connection options
   mongo: {
-    uri: 'mongodb://root:root@ds129156.mlab.com:29156/library'
+    uri: 'mongodb://mandeepmrahar:Mamohtra123@ds129966.mlab.com:29966/book'
   },
 
   // Seed database on startup
